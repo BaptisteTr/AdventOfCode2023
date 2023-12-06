@@ -87,8 +87,6 @@ test("should extract seeds range from input", () => {
     expect(seeds).toStrictEqual([[79,14],[55,13]])
 })
 
-//Failed to implement a working solution in time for part 2 :(
-/*
 test("Example result should be 46 for part2", () => {
     const input = "seeds: 79 14 55 13\n" +
         "\n" +
@@ -128,10 +126,9 @@ test("Example result should be 46 for part2", () => {
     expect(resolveDay5Part2(input)).toBe(46);
 })
 
-
 test("should resolve day5 input part2 ", async () => {
 
     const text = await content('./day5/day5input.txt')
 
-    expect(resolveDay5Part2(text)).toBe(5704953);
-})*/
+    expect(resolveDay5Part2(text)).toBe(31161857);
+})

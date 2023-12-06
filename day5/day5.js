@@ -34,14 +34,36 @@ function getSeedLocation(seed, maps) {
     return currentSeedValue;
 }
 
+function getSeedFromLocation(location, maps) {
+
+    let currentLocationValue = location;
+
+    maps.slice().reverse().forEach(map => {
+        map.every(range => {
+            //console.log("Checking range "+range+" for value "+currentSeedValue);
+            //If seed value is in source range
+            if(currentLocationValue >= range[0] && currentLocationValue < range[0]+range[2]) {
+                //We map it to new value
+                currentLocationValue = range[1] + (currentLocationValue - range[0]);
+                //console.log("New value = "+currentSeedValue);
+
+                //And we break out of loop
+                return false;
+            }
+            return true;
+        })
+    })
+
+    return currentLocationValue;
+}
+
 function extractMaps(input) {
     //Transform each mapText into an array of range after filtering for unwanted text
-    let maps = input.split("map:\n").filter((line) => !line.startsWith("seeds:")).map((mapText) => {
+    return input.split("map:\n").filter((line) => !line.startsWith("seeds:")).map((mapText) => {
         return mapText.split("\n").filter((mapValue) => mapValue.match(/^\d/)).map((mapValue) => {
             return [...mapValue.matchAll(/(\d+)/g)].map(iterator => parseInt(iterator[0]))
         });
     });
-    return maps;
 }
 
 function resolveDay5(input) {
@@ -58,44 +80,27 @@ function resolveDay5(input) {
 
 }
 
+function isContainedInSeedsRange(seed, seedsRange) {
+
+    let isFound = false;
+    seedsRange.forEach(seedRange => {
+        if(seed >= seedRange[0] && seed < seedRange[0]+seedRange[1]) {
+            isFound = true;
+        }
+    })
+
+    return isFound;
+}
+
 function resolveDay5Part2(input) {
     let seedsRange = extractSeedsRange(input);
     let maps = extractMaps(input);
-    let rangeMinimums = [];
 
-    console.log(seedsRange);
-
-    seedsRange.forEach((seedRange) => {
-        console.log("Checking "+seedRange);
-        let rangeLocations = seedRange;
-        for(let steps = 1000000; steps >= 1; steps /= 10) {
-
-            let newRanges = [];
-
-            for(let i = rangeLocations[0]; i< rangeLocations[0]+rangeLocations[1]; i = i + steps) {
-                if(steps === 1) {
-                    //console.log("i = "+i);
-                }
-                newRanges.push([[i, steps], getSeedLocation(i, maps)]);
-            }
-
-            console.log(rangeLocations);
-
-            rangeLocations = newRanges.reduce((previous, current) => {
-                return  previous[1] < current[1] ? previous : current;
-            })[0];
-
-            console.log(steps);
+    for(let i = 0; true; i++) {
+        if(isContainedInSeedsRange(getSeedFromLocation(i, maps), seedsRange)) {
+            return i;
         }
-
-        console.log(rangeLocations);
-        rangeMinimums.push(rangeLocations[0]);
-
-    })
-
-    console.log(rangeMinimums);
-
-    return Math.min(...rangeMinimums);
+    }
 }
 
 export {resolveDay5, resolveDay5Part2, extractSeeds, getSeedLocation}
