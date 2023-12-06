@@ -69,13 +69,27 @@ function resolveDay1(input) {
     return currentSumOfCoordinates;
 }
 
+function swapTextToNumeric(line) {
+    let newLine = line.replaceAll(/one/g, 'one1one');
+    newLine = newLine.replaceAll(/two/g, 'two2two');
+    newLine = newLine.replaceAll(/three/g, 'three3three');
+    newLine = newLine.replaceAll(/four/g, 'four4four');
+    newLine = newLine.replaceAll(/five/g, 'five5five');
+    newLine = newLine.replaceAll(/six/g, 'six6six');
+    newLine = newLine.replaceAll(/seven/g, 'seven7seven');
+    newLine = newLine.replaceAll(/eight/g, 'eight8eight');
+    newLine = newLine.replaceAll(/nine/g, 'nine9nine');
+
+    return newLine;
+}
+
 function resolveDay1Part2(input) {
 
     let currentSumOfCoordinates = 0;
 
     input.split("\n").forEach(line => {
-        currentSumOfCoordinates += parseInt(FindFirstDigitFromStringConsideringTextDigit(line) + FindLastDigitFromStringConsideringTextDigit(line));
-
+        let swappedLine = swapTextToNumeric(line);
+        currentSumOfCoordinates += parseInt(findFirstDigitFromString(swappedLine) + findLastDigitFromString(swappedLine));
     })
 
     return currentSumOfCoordinates;

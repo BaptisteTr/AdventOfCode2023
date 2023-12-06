@@ -70,5 +70,5 @@ test("should resolve day input part 2", async () => {
 
     const text = await content('./day1/day1input.txt')
 
-    expect(resolveDay1Part2(text)).toBe(53340)
+    expect(resolveDay1Part2(text)).toBe(53348)
 })
